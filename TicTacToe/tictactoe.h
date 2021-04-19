@@ -18,4 +18,11 @@ This function returns false if either x, y, or c are invalid or if the position 
 */
 bool placeChar(int x, int y, char c);
 
+/*
+isGameOver(): checks if the game is over
+
+This function returns true if there is a clear winner or if there are no more positions that can be occupied. Otherwise, the function returns false. 
+*/
+bool isGameOver();
+
 #endif
