@@ -25,4 +25,14 @@ This function returns true if there is a clear winner or if there are no more po
 */
 bool isGameOver();
 
+/*
+HorizontalWin(), VerticalWin(), DiagonalWin(): checks if a player has managed to place three of his/her marks on a horizontal, vertical, or diagonal row.
+
+Return true if that's the case, false otherwise. 
+*/
+bool HorizontalWin();
+bool VerticalWin();
+bool DiagonalWin();
+
+
 #endif

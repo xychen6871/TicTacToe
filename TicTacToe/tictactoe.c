@@ -20,6 +20,7 @@ void clearBoard() {
 			Game.board[i][j] = '*';
 		}
 	}
+	Game.state = ONGOING;
 	Game.open = 9;
 }
 
@@ -34,6 +35,85 @@ bool placeChar(int x, int y, char c) {
 		return true;
 	}
 	return false; // Position is occupied return false
+}
+
+bool isGameOver() {
+	if (HorizontalWin() || VerticalWin() || DiagonalWin()) { // A player has managed to place three of his/her marks on a horizontal, vertical, or diagonal row.
+		return true;
+	}
+
+	if (Game.open <= 0) { // No open spots left but neither player has won the game -> draw
+		Game.state = DRAW;
+		return true;
+	}
+	return false;
+}
+
+bool HorizontalWin() {
+	if (Game.board[0][0] == Game.board[0][1] == Game.board[0][2] && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first row
+		if (Game.board[0][0] == 'O') {
+			Game.state = O_WINS;
+		} else {
+			Game.state = X_WINS;
+		}
+		return true;
+	} else if (Game.board[1][0] == Game.board[1][1] == Game.board[1][2] && (Game.board[1][0] == 'X' || Game.board[1][0] == 'O')) { // 3 X's or 3 O's in 2nd row
+		if (Game.board[1][0] == 'O') {
+			Game.state = O_WINS;
+		} else {
+			Game.state = X_WINS;
+		}
+		return true;
+	} else if (Game.board[2][0] == Game.board[2][1] == Game.board[2][2] && (Game.board[2][0] == 'X' || Game.board[2][0] == 'O')) { // 3 X's or 3 O's in 3rd row
+		if (Game.board[2][0] == 'O') {
+			Game.state = O_WINS;
+		} else {
+			Game.state = X_WINS;
+		}
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool VerticalWin() {
+	if (Game.board[0][0] == Game.board[1][0] == Game.board[2][0] && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first column
+		if (Game.board[0][0] == 'O') {
+			Game.state = O_WINS;
+		} else {
+			Game.state = X_WINS;
+		}
+		return true;
+	} else if (Game.board[0][1] == Game.board[1][1] == Game.board[2][1] && (Game.board[0][1] == 'X' || Game.board[0][1] == 'O')) { // 3 X's or 3 O's in 2nd column
+		if (Game.board[0][1] == 'O') {
+			Game.state = O_WINS;
+		} else {
+			Game.state = X_WINS;
+		}
+		return true;
+	} else if (Game.board[0][2] == Game.board[1][2] == Game.board[2][2] && (Game.board[0][2] == 'X' || Game.board[0][2] == 'O')) { // 3 X's or 3 O's in 3rd column
+		if (Game.board[0][2] == 'O') {
+			Game.state = O_WINS;
+		} else {
+			Game.state = X_WINS;
+		}
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DiagonalWin() {
+	if ((Game.board[0][0] == Game.board[1][1] == Game.board[2][2]) || (Game.board[0][2] == Game.board[1][1] == Game.board[2][0])) {
+		if (Game.board[1][1] == 'O') {
+			Game.state = O_WINS;
+			return true;
+		} else if (Game.board[1][1] == 'X') {
+			Game.state = X_WINS;
+			return true;
+		}
+	}
+	return false;
 }
 
 int main() {
