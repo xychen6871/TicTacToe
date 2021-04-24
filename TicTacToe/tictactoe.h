@@ -34,5 +34,15 @@ bool HorizontalWin();
 bool VerticalWin();
 bool DiagonalWin();
 
+/*
+printBoard(): prints the board's current state
+*/
+void printBoard();
+
+/*
+Play(): plays a game of Tic-Tac-Toe between 2 human players
+*/
+void Play();
+
 
 #endif

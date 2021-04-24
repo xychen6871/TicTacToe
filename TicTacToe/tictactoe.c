@@ -116,6 +116,22 @@ bool DiagonalWin() {
 	return false;
 }
 
+void printBoard() {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			printf("%c", Game.board[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+void Play() {
+	printf("Welcome to the game of Tic-Tac-Toe. Player 1 will use the token O, while Player 2 will use the token X.\n");
+	clearBoard();
+	int turn = 0; // even = Player 1's turn, odd = Player 2's turn
+}
+
+
 int main() {
 	return 0;
 }
