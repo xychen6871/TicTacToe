@@ -129,9 +129,39 @@ void Play() {
 	printf("Welcome to the game of Tic-Tac-Toe. Player 1 will use the token O, while Player 2 will use the token X.\n");
 	clearBoard();
 	int turn = 0; // even = Player 1's turn, odd = Player 2's turn
+	while (!isGameOver()) {
+		printBoard();
+		if (turn % 2 == 0) { // Player 1's turn
+			printf("Player 1, it is your turn. Please enter a valid coordinate.\n");
+			
+		} else { // Player 2's turn
+			printf("Player 2, it is your turn. Please enter a valid coordinate.\n");
+			
+		}
+		int x;
+		int y;
+		scanf("%d %d", &x, &y);
+		char c = (turn % 2 == 0) ? 'O' : 'X';
+		if (placeChar(x,y,c)) {
+			turn++;
+			turn %= 2;
+		} else {
+			printf("This is not a valid move. Please try again\n");
+		}
+	}
+	printBoard();
+	if (Game.state == DRAW) {
+		printf("DRAW\n");
+	} else if (Game.state == O_WINS) {
+		printf("PLAYER 1 WINS\n");
+	} else {
+		printf("PLAYER 2 WINS\n");
+	}
 }
 
 
 int main() {
+	Play();
 	return 0;
+
 }
