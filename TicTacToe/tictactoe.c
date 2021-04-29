@@ -50,21 +50,21 @@ bool isGameOver() {
 }
 
 bool HorizontalWin() {
-	if (Game.board[0][0] == Game.board[0][1] == Game.board[0][2] && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first row
+	if ((Game.board[0][0] == Game.board[0][1]) && (Game.board[0][1] == Game.board[0][2]) && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first row
 		if (Game.board[0][0] == 'O') {
 			Game.state = O_WINS;
 		} else {
 			Game.state = X_WINS;
 		}
 		return true;
-	} else if (Game.board[1][0] == Game.board[1][1] == Game.board[1][2] && (Game.board[1][0] == 'X' || Game.board[1][0] == 'O')) { // 3 X's or 3 O's in 2nd row
+	} else if ((Game.board[1][0] == Game.board[1][1]) && (Game.board[1][1] == Game.board[1][2]) && (Game.board[1][0] == 'X' || Game.board[1][0] == 'O')) { // 3 X's or 3 O's in 2nd row
 		if (Game.board[1][0] == 'O') {
 			Game.state = O_WINS;
 		} else {
 			Game.state = X_WINS;
 		}
 		return true;
-	} else if (Game.board[2][0] == Game.board[2][1] == Game.board[2][2] && (Game.board[2][0] == 'X' || Game.board[2][0] == 'O')) { // 3 X's or 3 O's in 3rd row
+	} else if ((Game.board[2][0] == Game.board[2][1]) && (Game.board[2][1] == Game.board[2][2]) && (Game.board[2][0] == 'X' || Game.board[2][0] == 'O')) { // 3 X's or 3 O's in 3rd row
 		if (Game.board[2][0] == 'O') {
 			Game.state = O_WINS;
 		} else {
@@ -77,21 +77,21 @@ bool HorizontalWin() {
 }
 
 bool VerticalWin() {
-	if (Game.board[0][0] == Game.board[1][0] == Game.board[2][0] && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first column
+	if ((Game.board[0][0] == Game.board[1][0]) && (Game.board[1][0] == Game.board[2][0]) && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first column
 		if (Game.board[0][0] == 'O') {
 			Game.state = O_WINS;
 		} else {
 			Game.state = X_WINS;
 		}
 		return true;
-	} else if (Game.board[0][1] == Game.board[1][1] == Game.board[2][1] && (Game.board[0][1] == 'X' || Game.board[0][1] == 'O')) { // 3 X's or 3 O's in 2nd column
+	} else if ((Game.board[0][1] == Game.board[1][1]) && (Game.board[1][1] == Game.board[2][1]) && (Game.board[0][1] == 'X' || Game.board[0][1] == 'O')) { // 3 X's or 3 O's in 2nd column
 		if (Game.board[0][1] == 'O') {
 			Game.state = O_WINS;
 		} else {
 			Game.state = X_WINS;
 		}
 		return true;
-	} else if (Game.board[0][2] == Game.board[1][2] == Game.board[2][2] && (Game.board[0][2] == 'X' || Game.board[0][2] == 'O')) { // 3 X's or 3 O's in 3rd column
+	} else if ((Game.board[0][2] == Game.board[1][2]) && (Game.board[1][2] == Game.board[2][2]) && (Game.board[0][2] == 'X' || Game.board[0][2] == 'O')) { // 3 X's or 3 O's in 3rd column
 		if (Game.board[0][2] == 'O') {
 			Game.state = O_WINS;
 		} else {
@@ -104,7 +104,9 @@ bool VerticalWin() {
 }
 
 bool DiagonalWin() {
-	if ((Game.board[0][0] == Game.board[1][1] == Game.board[2][2]) || (Game.board[0][2] == Game.board[1][1] == Game.board[2][0])) {
+	bool diag1 = (Game.board[0][0] == Game.board[1][1]) && (Game.board[1][1] == Game.board[2][2]);
+	bool diag2 = (Game.board[0][2] == Game.board[1][1]) && (Game.board[1][1] == Game.board[2][0]);
+	if (diag1 || diag2) {
 		if (Game.board[1][1] == 'O') {
 			Game.state = O_WINS;
 			return true;
