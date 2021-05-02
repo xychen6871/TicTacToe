@@ -142,7 +142,13 @@ void Play() {
 		}
 		int x;
 		int y;
-		scanf("%d %d", &x, &y);
+		int r;
+		r = scanf("%d %d", &x, &y);
+		if (r != 2) {
+			break;
+		}
+		
+		
 		char c = (turn % 2 == 0) ? 'O' : 'X';
 		if (placeChar(x,y,c)) {
 			turn++;
@@ -156,8 +162,10 @@ void Play() {
 		printf("DRAW\n");
 	} else if (Game.state == O_WINS) {
 		printf("PLAYER 1 WINS\n");
-	} else {
+	} else if (Game.state == X_WINS) {
 		printf("PLAYER 2 WINS\n");
+	} else {
+		printf("ABORTED\n");
 	}
 }
 
