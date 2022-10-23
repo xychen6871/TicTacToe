@@ -10,6 +10,10 @@ struct TicTacToeBoard {
 	char board[3][3];
 	int open;
 	enum status state;
+	int rows[3]; // increments by 1 if O is placed, decrements by 1 if X is placed
+	int cols[3]; // increments by 1 if O is placed, decrements by 1 if X is placed
+	int diag; // increments by 1 if O is placed, decrements by 1 if X is placed
+	int antiDiag; // increments by 1 if O is placed, decrements by 1 if X is placed
 };
 
 struct TicTacToeBoard Game;
@@ -20,6 +24,14 @@ void clearBoard() {
 			Game.board[i][j] = '*';
 		}
 	}
+
+	for (int i = 0; i < 3; i++) {
+		Game.rows[i] = 0;
+		Game.cols[i] = 0;
+	}
+
+	Game.diag = 0;
+	Game.antiDiag = 0;
 	Game.state = ONGOING;
 	Game.open = 9;
 }
@@ -32,6 +44,15 @@ bool placeChar(int x, int y, char c) {
 	if (Game.board[x][y] == '*') {
 		Game.board[x][y] = c; // Position is unoccupied, so we can place either a 'X' or 'O' on the position
 		Game.open--;
+
+		Game.rows[x] += (c == 'O') ? 1 : -1;
+		Game.cols[y] += (c == 'O') ? 1 : -1;
+		if (x == y) {
+			Game.diag += (c == 'O') ? 1 : -1;
+		}
+		if (x + y + 1 == 3) {
+			Game.antiDiag += (c == 'O') ? 1 : -1;
+		}
 		return true;
 	}
 	return false; // Position is occupied return false
@@ -40,9 +61,7 @@ bool placeChar(int x, int y, char c) {
 bool isGameOver() {
 	if (HorizontalWin() || VerticalWin() || DiagonalWin()) { // A player has managed to place three of his/her marks on a horizontal, vertical, or diagonal row.
 		return true;
-	}
-
-	if (Game.open <= 0) { // No open spots left but neither player has won the game -> draw
+	} else if (Game.open <= 0) { // No open spots left but neither player has won the game -> draw
 		Game.state = DRAW;
 		return true;
 	}
@@ -50,70 +69,32 @@ bool isGameOver() {
 }
 
 bool HorizontalWin() {
-	if ((Game.board[0][0] == Game.board[0][1]) && (Game.board[0][1] == Game.board[0][2]) && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first row
-		if (Game.board[0][0] == 'O') {
-			Game.state = O_WINS;
-		} else {
-			Game.state = X_WINS;
+	for (int i = 0; i < 3; i++) {
+		if (abs(Game.rows[i]) == 3) {
+			Game.state = (Game.rows[i] > 0) ? O_WINS : X_WINS;
+			return true;
 		}
-		return true;
-	} else if ((Game.board[1][0] == Game.board[1][1]) && (Game.board[1][1] == Game.board[1][2]) && (Game.board[1][0] == 'X' || Game.board[1][0] == 'O')) { // 3 X's or 3 O's in 2nd row
-		if (Game.board[1][0] == 'O') {
-			Game.state = O_WINS;
-		} else {
-			Game.state = X_WINS;
-		}
-		return true;
-	} else if ((Game.board[2][0] == Game.board[2][1]) && (Game.board[2][1] == Game.board[2][2]) && (Game.board[2][0] == 'X' || Game.board[2][0] == 'O')) { // 3 X's or 3 O's in 3rd row
-		if (Game.board[2][0] == 'O') {
-			Game.state = O_WINS;
-		} else {
-			Game.state = X_WINS;
-		}
-		return true;
-	} else {
-		return false;
 	}
+	return false;
 }
 
 bool VerticalWin() {
-	if ((Game.board[0][0] == Game.board[1][0]) && (Game.board[1][0] == Game.board[2][0]) && (Game.board[0][0] == 'X' || Game.board[0][0] == 'O')) { // 3 X's or 3 O's in first column
-		if (Game.board[0][0] == 'O') {
-			Game.state = O_WINS;
-		} else {
-			Game.state = X_WINS;
+	for (int i = 0; i < 3; i++) {
+		if (abs(Game.cols[i]) == 3) {
+			Game.state = (Game.cols[i] > 0) ? O_WINS : X_WINS;
+			return true;
 		}
-		return true;
-	} else if ((Game.board[0][1] == Game.board[1][1]) && (Game.board[1][1] == Game.board[2][1]) && (Game.board[0][1] == 'X' || Game.board[0][1] == 'O')) { // 3 X's or 3 O's in 2nd column
-		if (Game.board[0][1] == 'O') {
-			Game.state = O_WINS;
-		} else {
-			Game.state = X_WINS;
-		}
-		return true;
-	} else if ((Game.board[0][2] == Game.board[1][2]) && (Game.board[1][2] == Game.board[2][2]) && (Game.board[0][2] == 'X' || Game.board[0][2] == 'O')) { // 3 X's or 3 O's in 3rd column
-		if (Game.board[0][2] == 'O') {
-			Game.state = O_WINS;
-		} else {
-			Game.state = X_WINS;
-		}
-		return true;
-	} else {
-		return false;
 	}
+	return false;
 }
 
 bool DiagonalWin() {
-	bool diag1 = (Game.board[0][0] == Game.board[1][1]) && (Game.board[1][1] == Game.board[2][2]);
-	bool diag2 = (Game.board[0][2] == Game.board[1][1]) && (Game.board[1][1] == Game.board[2][0]);
-	if (diag1 || diag2) {
-		if (Game.board[1][1] == 'O') {
-			Game.state = O_WINS;
-			return true;
-		} else if (Game.board[1][1] == 'X') {
-			Game.state = X_WINS;
-			return true;
-		}
+	if (abs(Game.diag) == 3) {
+		Game.state = (Game.diag > 0) ? O_WINS : X_WINS;
+		return true;
+	} else if (abs(Game.antiDiag) == 3) {
+		Game.state = (Game.antiDiag > 0) ? O_WINS : X_WINS;
+		return true;
 	}
 	return false;
 }
@@ -134,10 +115,10 @@ void Play() {
 	while (!isGameOver()) {
 		printBoard();
 		if (turn % 2 == 0) { // Player 1's turn
-			printf("Player 1, it is your turn. Please enter a valid coordinate.\n");
+			printf("Player 1, it is your turn. Please enter a valid coordinate (r, c).\n");
 			
 		} else { // Player 2's turn
-			printf("Player 2, it is your turn. Please enter a valid coordinate.\n");
+			printf("Player 2, it is your turn. Please enter a valid coordinate (r, c).\n");
 			
 		}
 		int x;
